@@ -17,7 +17,7 @@ export class UserService {
     // hash user's password before saving in database
     if (existingUser) throw new UnauthorizedException({ status: false, message: 'User exists already' });
 
-    let hashedPassword = bcrypt.hashSync(dto.password, 20);
+    let hashedPassword = await bcrypt.hash(dto.password, 20);
 
     const newUser = new this.userModel({ email: dto.email, password: hashedPassword, username: dto.username });
 
@@ -33,18 +33,19 @@ export class UserService {
     // hash user's password before saving in database
     if (!existingUser) throw new UnauthorizedException('Invalid Credentials');
 
-    // if (existingUser) {
-    //   const match = bcrypt.compareSync(dto.password, existingUser.password);
-    //   if (!match) throw new UnauthorizedException({ status: false, message: 'Incorrect Credentials' });
-    // }
+    // Check if valid password
+    if (existingUser) {
+      const match = await bcrypt.compare(dto.password, existingUser.password);
+      if (!match) throw new UnauthorizedException({ status: false, message: 'Incorrect Credentials' });
+    }
 
-    return this.signUserCredentials(existingUser.username, existingUser._id, existingUser.password, existingUser.email);
+    // Sign the payload to get the token
+    const token = this.signUserCredentials(existingUser.username, existingUser._id, existingUser.password, existingUser.email);
+    return {user: existingUser, token}
   }
 
   signUserCredentials(username: string, userId: string, password: string, email: string) {
     const payload = { username, sub: userId, email, password };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    return this.jwtService.sign(payload);
   }
 }
