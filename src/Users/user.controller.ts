@@ -14,6 +14,7 @@ export class UserController {
     return this.userService.signUp(dto);
   }
 
+  // Sign A User in
   @Post('sign-in')
   signIn(@Body() dto: AuthDto): any {
     return this.userService.login(dto);
