@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Patch, Req, UseGuards, Param } from '@nestjs/common';
+import { Body, Controller, Get, Post, Patch, Req, UseGuards, Param, Delete } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ContactService } from './contacts.service';
 import { ValidDto } from './dto/index.dto';
@@ -16,7 +16,13 @@ export class ContactController {
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  edit(@Param('id') id:string, @Body() dto: ValidDto, @Req() req: any) {
+  edit(@Param('id') id: string, @Body() dto: ValidDto, @Req() req: any) {
     return this.contactService.editContact(id, dto, req);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':id')
+  deleteAContact(@Param('id') id: string): any {
+    return this.contactService.deleteContact(id);
   }
 }
