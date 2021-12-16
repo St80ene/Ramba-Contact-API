@@ -7,11 +7,11 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    UserModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(
       'mongodb+srv://st80ene:etiene@cluster0.hyuym.mongodb.net/contact-api?retryWrites=true&w=majority',
     ),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
