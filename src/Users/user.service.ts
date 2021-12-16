@@ -17,13 +17,11 @@ export class UserService {
     // hash user's password before saving in database
     if (existingUser) throw new UnauthorizedException({ status: false, message: 'User exists already' });
 
-    // let hashedPassword = await bcrypt.hash(dto.password, 20);
-
     const newUser = new this.userModel({ email: dto.email, password: dto.password, username: dto.username });
 
     const user = await newUser.save();
 
-    return user;
+    return { status: true, message: 'User sign up successful', user};
   }
 
   async login(dto: AuthDto) {
@@ -41,7 +39,7 @@ export class UserService {
         existingUser.password,
         existingUser.email,
       );
-      return { user: existingUser, token };
+      return { status: true, message: 'User sign in successful', user: existingUser, token };
     }
     return null;
 
