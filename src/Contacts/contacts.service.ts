@@ -53,12 +53,18 @@ export class ContactService {
     return { status: true, message: 'Contact update was successful', updatedContact };
   }
 
-  async deleteContact(id:string) {
-    await this.ContactModel.findByIdAndDelete(id)
-    return {status: true, message: 'Contact deleted successfully'};
+  async deleteContact(id: string) {
+    await this.ContactModel.findByIdAndDelete(id);
+    return { status: true, message: 'Contact deleted successfully' };
   }
 
-  async getAllContacts(){
-    return this.ContactModel.find()
+  async getAllContacts() {
+    let contacts = await this.ContactModel.find();
+    return { status: true, message: 'Contacts retrieved successfully', contacts };
+  }
+
+  async getSingleContact(id: string) {
+    let contact = await this.ContactModel.findById(id);
+    return { status: true, message: 'Contacts retrieved successfully', contact };
   }
 }
