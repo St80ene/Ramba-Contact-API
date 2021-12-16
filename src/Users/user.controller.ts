@@ -20,8 +20,7 @@ export class UserController {
 
   // Logout a user
   @Get('logout')
-  logOut(@Res() res): any {
-    res.status(302).redirect('sign-in');
+  logOut(): any {
     return { status: true, message: 'Logout successful' };
   }
 }
