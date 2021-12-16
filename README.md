@@ -20,3 +20,12 @@ $ npm run start:prod
 ```
 #### Hosted link 
 [Heroku](https://ramba-contact.herokuapp.com/)
+
+### Tools
+- NestJs
+- MongoDB
+- Mongoose
+- TypeScript
+
+### Documentation
+[Postman](https://documenter.getpostman.com/view/11145480/UVR8pTFR)
