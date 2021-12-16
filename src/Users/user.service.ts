@@ -17,9 +17,9 @@ export class UserService {
     // hash user's password before saving in database
     if (existingUser) throw new UnauthorizedException({ status: false, message: 'User exists already' });
 
-    let hashedPassword = await bcrypt.hash(dto.password, 20);
+    // let hashedPassword = await bcrypt.hash(dto.password, 20);
 
-    const newUser = new this.userModel({ email: dto.email, password: hashedPassword, username: dto.username });
+    const newUser = new this.userModel({ email: dto.email, password: dto.password, username: dto.username });
 
     const user = await newUser.save();
 
@@ -34,14 +34,18 @@ export class UserService {
     if (!existingUser) throw new UnauthorizedException('Invalid Credentials');
 
     // Check if valid password
-    if (existingUser) {
-      const match = await bcrypt.compare(dto.password, existingUser.password);
-      if (!match) throw new UnauthorizedException({ status: false, message: 'Incorrect Credentials' });
+    if (existingUser && existingUser.password === dto.password) {
+      const token = this.signUserCredentials(
+        existingUser.username,
+        existingUser._id,
+        existingUser.password,
+        existingUser.email,
+      );
+      return { user: existingUser, token };
     }
+    return null;
 
     // Sign the payload to get the token
-    const token = this.signUserCredentials(existingUser.username, existingUser._id, existingUser.password, existingUser.email);
-    return {user: existingUser, token}
   }
 
   signUserCredentials(username: string, userId: string, password: string, email: string) {
