@@ -52,4 +52,9 @@ export class ContactService {
 
     return { status: true, message: 'Contact update was successful', updatedContact };
   }
+
+  async deleteContact(id:string) {
+    await this.ContactModel.findByIdAndDelete(id)
+    return {status: true, message: 'Contact deleted successfully'};
+  }
 }
