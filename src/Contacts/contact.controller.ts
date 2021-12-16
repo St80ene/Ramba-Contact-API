@@ -25,4 +25,10 @@ export class ContactController {
   deleteAContact(@Param('id') id: string): any {
     return this.contactService.deleteContact(id);
   }
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  fetchAllContacts(): any {
+    return this.contactService.getAllContacts();
+  }
 }

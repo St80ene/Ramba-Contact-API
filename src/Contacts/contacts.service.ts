@@ -57,4 +57,8 @@ export class ContactService {
     await this.ContactModel.findByIdAndDelete(id)
     return {status: true, message: 'Contact deleted successfully'};
   }
+
+  async getAllContacts(){
+    return this.ContactModel.find()
+  }
 }
